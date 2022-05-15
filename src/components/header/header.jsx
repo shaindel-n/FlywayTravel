@@ -17,7 +17,7 @@ import { MenuRounded } from "@material-ui/icons";
 const pages = [
   { title: "Home", path: "/" },
   { title: "Hotels", path: "/hotels" },
-  // { title: "Chat", path: "/chat" },
+  { title: "Activities", path: "/activities" },
 ];
 
 export const Header = () => {

@@ -1,0 +1,41 @@
+.hotels{
+    display:grid;
+    grid-template-columns: [col1] 25% [col2] 25% [col3] 25% [col4] 25%;
+    grid-template-rows: [row1] 33.3% [row2] 33.3% [row3] 33.3%;
+    grid:inherit;
+}
+
+.pins{
+    grid-column: 4;
+    grid-row: 1;
+    height: 3rem;
+    margin-top: 4rem;
+    justify-self: right;
+}
+
+.filter{
+    grid-column: 1;
+    grid-row: 1;
+    margin-top: 2rem;
+}
+
+.checkIn{
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 4rem;
+}
+
+.checkOut{
+    grid-column: 3;
+    grid-row: 1;
+    margin-top: 4rem;
+}
+
+.hotels{
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 3rems;
+    margin-right: 2rem;
+    text-align: center;
+    /* color: rgb(88, 214, 183); */
+} 

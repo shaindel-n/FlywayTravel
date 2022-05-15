@@ -1,52 +1,125 @@
-import { Paper, TextField, Typography } from "@mui/material";
+import { Button, Paper, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+//import { HomeContext } from "../state/home/context";
+import "./home.css";
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
+import Hotels from "../hotels/hotels";
+import { Link } from "react-router-dom";
 
-function LocationInput() {
+function LocationInput({ setCurrLocation, setAirports, setCurrLocationId }) {
+  const [locationInput, setLocationInput] = useState("");
+
+  const inputLocation = (e) => {
+    e.preventDefault();
+    if (!inputLocation) {
+      console.log("error");
+      return;
+    }
+    setCurrLocation(locationInput);
+    console.log(locationInput);
+    setLocationInput("");
+    try {
+      const options = {
+        method: "GET",
+        headers: {
+          "X-RapidAPI-Host": "hotels4.p.rapidapi.com",
+          "X-RapidAPI-Key":
+            "12754539cdmshf2c81b762b1275bp1db5dajsncd6d5dbc56ac",
+        },
+      };
+      //useEffect(() => {
+      fetch(
+        `https://hotels4.p.rapidapi.com/locations/v2/search?query=${locationInput}&locale=en_US&currency=USD`,
+        options
+      )
+        .then((response) => response.json())
+        .then((response) => setAirports(response.suggestions[3].entities))
+        // .then((response) =>
+        //   setCurrLocationId(response.suggestions[0].entities[0].destinationId)
+        // )
+        .catch((err) => console.error(err));
+      //}, []);
+    } catch (err) {
+      console.log("error", err);
+    }
+  };
+
   return (
-    <TextField
-      id="standard-basic"
-      label="Where would you like to go?"
-      variant="standard"
-      style={{ minWidth: "20rem", justifyContent: "center" }}
-    />
+    <div class="locationInput">
+      <form onSubmit={inputLocation}>
+        <TextField
+          id="standard-basic"
+          label="Where would you like to go?"
+          variant="standard"
+          //style={{ minWidth: "20rem" }} // justifyContent: "center" }}
+          onChange={(e) => setLocationInput(e.target.value)}
+        />
+      </form>
+    </div>
   );
 }
 
 function Airport(props) {
+  const handleClick = () => {
+    props.setCurrLocationId(props.locationId);
+    props.setCurrLong(props.longitude);
+    props.setCurrLat(props.latitude);
+    console.log(
+      "longitude: " + props.longitude + "latitude: " + props.latitude
+    );
+    console.log(props.locationId);
+    <Link to="/hotels" />;
+  };
   return (
-    <Box
-      className="airport"
-      sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        flexDirection: "row",
-      }}
-      defaultValue=""
-      style={{
-        justifyContent: "center",
-        marginTop: "1rem",
+    //<div>
+    <Button
+      onClick={() => {
+        handleClick();
       }}
     >
-      <Paper
-        style={{
-          padding: ".5rem",
-          backgroundColor: "rgb(88, 214, 183)",
-          color: "white",
-          minWidth: "30rem",
-        }}
-        label={props.title}
+      <Box
+        class="airport"
+        sx={
+          {
+            //display: "flex",
+            // flexWrap: "wrap",
+            // flexDirection: "column",
+            //m: "3rem",
+          }
+        }
+        defaultValue=""
       >
-        <h1>{props.title}</h1>
-        <h4>{props.location}</h4>
-      </Paper>
-    </Box>
+        <Paper
+          style={{
+            padding: ".5rem",
+            backgroundColor: "rgb(88, 214, 183)",
+            color: "white",
+            //minWidth: "50rem",
+          }}
+          label={props.name}
+        >
+          <h1>{props.name}</h1>
+          <h2>{props.locationId}</h2>
+          <h3>{props.type}</h3>
+          {/* <h4>{props.location}</h4> */}
+        </Paper>
+      </Box>
+    </Button>
+
+    //</div>
   );
 }
 
 function Welcome() {
   return (
-    <div>
+    <div class="welcome">
       <Typography
         variant="h2"
         style={{
@@ -61,27 +134,69 @@ function Welcome() {
   );
 }
 
-export const Home = () => {
-  const [airports, setAirports] = useState([
-    {
-      title: "LaGuardia",
-      location: "NY",
+export const Home = (props) => {
+  const [location, setLocation] = useState("");
+
+  const setCurrLocation = (text) => {
+    setLocation(text);
+  };
+
+  const setCurrLocationId = (text) => {
+    props.changeLocation(text);
+  };
+
+  const setCurrLong = (text) => {
+    props.changeLongitude(text);
+  };
+
+  const setCurrLat = (text) => {
+    props.changeLatitude(text);
+  };
+
+  const [airports, setAirports] = useState([]);
+
+  const options = {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Host": "hotels4.p.rapidapi.com",
+      "X-RapidAPI-Key": "12754539cdmshf2c81b762b1275bp1db5dajsncd6d5dbc56ac",
     },
-    {
-      title: "Newark",
-      location: "NJ",
-    },
-  ]);
+  };
+
+  const changeLocation = document.getElementById("locationInput");
+  if (changeLocation) {
+    changeLocation.addEventListener("submit", () =>
+      fetch(
+        `https://hotels4.p.rapidapi.com/locations/v2/search?query=${location}&locale=en_US&currency=USD`,
+        options
+      )
+        .then((response) => response.json())
+        .then((response) => setAirports(response.suggestions[3].entities))
+        .catch((err) => console.error(err))
+    );
+  }
 
   return (
-    <div>
+    <div class="home">
+      {/* style={{ marginLeft: "auto", marginRight: "auto" }}> */}
       <Welcome />
-      <LocationInput />
+      <LocationInput
+        setAirports={setAirports}
+        setCurrLocation={setCurrLocation}
+        id="locationInput"
+        setCurrLocationId={setCurrLocationId}
+      />
       {airports.map((airport, index) => (
         <Airport
-          title={airport.title}
-          location={airport.location}
+          name={airport.name}
+          type={airport.type}
           key={index}
+          locationId={airport.destinationId}
+          longitude={airport.longitude}
+          latitude={airport.latitude}
+          setCurrLong={setCurrLong}
+          setCurrLat={setCurrLat}
+          setCurrLocationId={setCurrLocationId}
         />
       ))}
     </div>
