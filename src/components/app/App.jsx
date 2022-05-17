@@ -3,8 +3,9 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import { Hotels } from "../hotels/hotels";
 import { Home } from "../home/home";
 import { Header } from "../header/header";
-import { Activities } from "../activities/activities";
+import { Activities, MainPage } from "../activities/activities";
 import { FavoritesProvider } from "../state/home/context";
+import { Favorites } from "../favorites/favorites";
 import { useState } from "react";
 
 function App() {
@@ -44,13 +45,14 @@ function App() {
           <Route
             path="/activities"
             element={
-              <Activities
+              <MainPage
                 locationId={locationId}
                 longitude={longitude}
                 latitude={latitude}
               />
             }
           />
+          <Route path="/favorites" element={<Favorites />} />
         </Routes>
       </HashRouter>
     </FavoritesProvider>

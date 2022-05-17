@@ -18,6 +18,7 @@ const pages = [
   { title: "Home", path: "/" },
   { title: "Hotels", path: "/hotels" },
   { title: "Activities", path: "/activities" },
+  { title: "Favorites", path: "/favorites" },
 ];
 
 export const Header = () => {
