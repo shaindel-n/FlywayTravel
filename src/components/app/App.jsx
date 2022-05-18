@@ -12,6 +12,7 @@ function App() {
   const [locationId, setLocationId] = useState("1662393");
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
+  const [currHotel, setCurrHotel] = useState("");
 
   const changeLocation = (locId) => {
     setLocationId(locId);

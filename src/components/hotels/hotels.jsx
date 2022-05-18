@@ -24,10 +24,11 @@ import Select from "@mui/material/Select";
 
 import { useEffect, useState, useContext } from "react";
 import { AlignVerticalBottom } from "@mui/icons-material";
+import { FavoriteBorderTwoTone } from "@material-ui/icons";
 
 export function Hotel(props) {
   const listContext = useContext(FavoritesContext);
-
+  const [favorited, setFavorited] = useState(false);
   return (
     <div className="hotel">
       <Card
@@ -46,7 +47,38 @@ export function Hotel(props) {
           image={props.thumbnail}
           alt="thumbnail"
         />
-        <CardContent>
+        <CardActions style={{ position: "relative", top: "10rem" }}>
+          <Button>
+            <FavoriteIcon
+              style={{
+                color: favorited ? "red" : "lightgray",
+              }}
+              onClick={() => {
+                if (!favorited) {
+                  listContext.listDispatch({
+                    type: "add",
+                    index: props.index,
+                    title: props.title,
+                    thumbnail: props.thumbnail,
+                    streetAddress: props.streetAddress,
+                    starRating: props.starRating,
+                    id: props.id,
+                    price:
+                      props.price &&
+                      props.price.ratePlan &&
+                      props.price.ratePlan.price &&
+                      props.price.ratePlan.price.current
+                        ? props.price.ratePlan.price.current
+                        : "-----",
+                  });
+                }
+                setFavorited(true);
+              }}
+            />
+            {console.log(listContext)}
+          </Button>
+        </CardActions>
+        <CardContent style={{ position: "relative", top: "-3rem" }}>
           <Typography gutterBottom variant="h5" component="div" color="white">
             {props.title}
           </Typography>
@@ -61,36 +93,14 @@ export function Hotel(props) {
               : "-----"}
           </Typography>
           <Typography style={{ marginTop: ".2rem" }}>
-            <Rating name="read-only" value={props.starRating} readOnly />
+            <Rating
+              name="read-only"
+              value={props.starRating}
+              precision={0.5}
+              readOnly
+            />
           </Typography>
         </CardContent>
-        <CardActions>
-          <Button>
-            <FavoriteIcon
-              style={{
-                color: "red",
-              }}
-              onClick={() => {
-                listContext.listDispatch({
-                  type: "add",
-                  index: props.index,
-                  title: props.title,
-                  thumbnail: props.thumbnail,
-                  streetAddress: props.streetAddress,
-                  starRating: props.starRating,
-                  id: props.id,
-                  price:
-                    props.price &&
-                    props.price.ratePlan &&
-                    props.price.ratePlan.price &&
-                    props.price.ratePlan.price.current
-                      ? props.price.ratePlan.price.current
-                      : "-----",
-                });
-              }}
-            />
-          </Button>
-        </CardActions>
       </Card>
     </div>
   );
@@ -138,11 +148,7 @@ export function Hotel(props) {
 function RateFilter(props) {
   const [rating, setRating] = useState("");
   const handleChange = (event) => {
-    // const newRating = event.target.value;
-    // console.log(newRating);
-    // setRating(newRating);
-    // props.setRateFilter(rating, () => rating);
-    console.log("before" + props.rateFilter);
+    setRating(event.target.value);
     fetch(
       `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=28&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD&starRatings=${event.target.value}`,
       options
@@ -152,7 +158,6 @@ function RateFilter(props) {
         props.setHotels(response.data.body.searchResults.results)
       )
       .catch((err) => console.error(err));
-    console.log("after" + rating);
   };
   const options = {
     method: "GET",
@@ -278,7 +283,6 @@ export const Hotels = (props) => {
   const [rateFilter, setRateFilter] = useState("1");
   const [priceFilterMin, setPriceFilterMin] = useState("0");
   const [priceFilterMax, setPriceFilterMax] = useState("100");
-  const [liked, setLiked] = useState([]);
   //const [locId, setLocId] = useState("");
 
   const [heading, setHeading] = useState("");
