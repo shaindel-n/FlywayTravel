@@ -11,8 +11,11 @@ const changeFavoritesReducer = (state, action) => {
           title: action.title,
           id: action.id,
           index: action.index,
-          image: action.image,
+          thumbnail: action.thumbnail,
           isFavorited: true,
+          streetAddress: action.streetAddress,
+          starRating: action.starRating,
+          price: action.price,
         },
       ];
       return newFavorites;

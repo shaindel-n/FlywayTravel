@@ -12,8 +12,14 @@ import {
   CardContent,
   Typography,
   CardActions,
+  Grid,
   TextField,
+  Rating,
+  Button,
 } from "@mui/material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useContext } from "react";
+import { FavoritesContext } from "../state/home/context";
 
 // function Filter(props) {
 //   const handleChange = (e) => {
@@ -103,33 +109,28 @@ const Activities = (props) => {
 
   return (
     <div style={{ marginTop: "3rem" }}>
-      {loading && <div>loading new activities.. </div>}
-      {activities.map((activity, index) => (
-        <Activity
-          title={activity.name}
-          starRating={activity.rate}
-          neighborhood={activity.address.neighbourhood}
-          city={activity.address.city}
-          url={activity.url}
-        />
-      ))}
+      {loading && <div>loading activities.. </div>}
+      <Grid container direction="row" columns={12} spacing={2}>
+        {activities.map((activity, index) => (
+          <Grid item xs={3}>
+            {" "}
+            <Activity
+              title={activity.name}
+              starRating={activity.rate}
+              neighborhood={activity.address.neighbourhood}
+              city={activity.address.city}
+              url={activity.url}
+            />
+          </Grid>
+        ))}
+      </Grid>
     </div>
   );
 };
 
-// const Activity = (props) => {
-//   return (
-//     <div>
-//       <div>title: {props.title}</div>
-//       <div>rating: {props.starRating}</div>
-//       <div>
-//         {props.neighborhood}, {props.city}
-//       </div>
-//     </div>
-//   );
-// };
+export function Activity(props) {
+  const listContext = useContext(FavoritesContext);
 
-function Activity(props) {
   return (
     <div className="activity">
       <Card
@@ -137,7 +138,8 @@ function Activity(props) {
         style={{
           background: "rgb(88, 214, 183)",
           color: "white",
-          minHeight: "20rem",
+          // minHeight: "20rem",
+          maxHeight: "8rem",
           margin: "1rem",
         }}
       >
@@ -155,21 +157,28 @@ function Activity(props) {
             {props.neighborhood}, {props.city}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {props.starRating}
+            <Rating name="read-only" value={props.starRating} readOnly />
           </Typography>
         </CardContent>
-        <CardActions>
-          {/* <IconButton
-            onClick={() => (
-              props.liked ? (props.liked = false) : (props.liked = true),
-              console.log(props.liked)
-            )}
-            style={{
-              color: props.liked ? "red" : "lightgrey",
-            }}
-          >
-            <FavoriteIcon />
-          </IconButton> */}
+        <CardActions
+          style={{ position: "relative", bottom: "3rem", float: "right" }}
+        >
+          <Button>
+            <FavoriteIcon
+              style={{
+                color: "red",
+              }}
+              onClick={() => {
+                listContext.listDispatch({
+                  type: "add",
+                  index: props.index,
+                  title: props.title,
+                  starRating: props.starRating,
+                  id: props.id,
+                });
+              }}
+            />
+          </Button>
         </CardActions>
       </Card>
     </div>

@@ -78,24 +78,13 @@ function Airport(props) {
   };
   return (
     //<div>
-    <Link to="/hotels">
+    <Link to="/hotels" style={{ textDecoration: "none" }}>
       <Button
         onClick={() => {
           handleClick();
         }}
       >
-        <Box
-          class="airport"
-          sx={
-            {
-              //display: "flex",
-              // flexWrap: "wrap",
-              // flexDirection: "column",
-              //m: "3rem",
-            }
-          }
-          defaultValue=""
-        >
+        <Box class="airport" defaultValue="">
           <Paper
             style={{
               padding: ".5rem",
@@ -111,7 +100,6 @@ function Airport(props) {
             <h1>{props.name}</h1>
 
             <h3>({props.type})</h3>
-            {/* <h4>{props.location}</h4> */}
           </Paper>
         </Box>
       </Button>
