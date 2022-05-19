@@ -44,6 +44,7 @@ function App() {
           />
           <Route path="/hotels" element={<Hotels location={locationId} />} />
           <Route
+            style={{ backgroundColor: "whitesmoke" }}
             path="/activities"
             element={
               <MainPage

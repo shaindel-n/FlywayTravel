@@ -20,34 +20,9 @@ import {
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useContext } from "react";
 import { FavoritesContext } from "../state/home/context";
-
-// function Filter(props) {
-//   const handleChange = (e) => {
-//     props.setFilter(e.target.value);
-//   };
-
-//   return (
-//     <Box style={{ position: "absolute", right: "5", top: "5" }}>
-//       <FormControl style={{ margin: "2rem" }}>
-//         <InputLabel id="demo-simple-select-label">Filter by Rating</InputLabel>
-//         <Select
-//           labelId="demo-simple-select-label"
-//           id="demo-simple-select"
-//           value={props.filter}
-//           label="Filter by Rating"
-//           onChange={handleChange}
-//           style={{ maxWidth: "10%", minWidth: "10rem", justifyItems: "left" }}
-//         >
-//           <MenuItem value={5}>5 Stars</MenuItem>
-//           <MenuItem value={4}>4 Stars</MenuItem>
-//           <MenuItem value={3}>3 Stars</MenuItem>
-//         </Select>
-//       </FormControl>
-//     </Box>
-//   );
-// }
-
+import "./activities.css";
 import React, { useState, useEffect } from "react";
+import { fontFamily } from "@mui/system";
 
 export const MainPage = (props) => {
   const [heading, setHeading] = useState("");
@@ -70,7 +45,17 @@ export const MainPage = (props) => {
   };
   return (
     <div>
-      <Typography class="header" fontSize={30}>
+      <Typography
+        class="header"
+        fontSize={50}
+        style={{
+          color: "grey",
+          textAlign: "center",
+          marginTop: "4rem",
+          fontWeight: "bold",
+          fontFamily: "Segoe Print, Display, Script, Sans Serif",
+        }}
+      >
         Activities near {heading}
       </Typography>
       <Activities latitude={props.latitude} longitude={props.longitude} />
@@ -157,14 +142,15 @@ const Activities = (props) => {
 
 export function Activity(props) {
   const listContext = useContext(FavoritesContext);
+  const [favorited, setFavorited] = useState(false);
 
   return (
     <div className="activity">
       <Card
         sx={{ maxWidth: 345 }}
         style={{
-          background: "rgb(88, 214, 183)",
-          color: "white",
+          background: "white",
+          color: "rgb(88, 214, 183)",
           minHeight: "10rem",
           maxHeight: "10rem",
           margin: "1rem",
@@ -173,40 +159,53 @@ export function Activity(props) {
         <CardActions
           style={{ position: "relative", top: "6rem", float: "right" }}
         >
+          <Rating
+            name="read-only"
+            value={props.starRating}
+            precision={0.5}
+            max={3}
+            readOnly
+            style={{}}
+          />
           <Button>
             <FavoriteIcon
               style={{
-                color: "red",
+                color: favorited ? "red" : "lightgray",
               }}
               onClick={() => {
-                listContext.listDispatch({
-                  type: "add",
-                  index: props.index,
-                  title: props.title,
-                  starRating: props.starRating,
-                  id: props.id,
-                });
+                if (!favorited) {
+                  listContext.listDispatch({
+                    type: "add",
+                    index: props.index,
+                    title: props.title,
+                    starRating: props.starRating,
+                    id: props.id,
+                  });
+                  setFavorited(true);
+                }
               }}
             />
           </Button>
         </CardActions>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            <a href={props.url}>{props.title}</a>
+            <a
+              href={props.url}
+              style={{
+                textDecoration: "none",
+                color: "rgb(88, 214, 183)",
+                fontStyle: "italic",
+                fontWeight: "bold",
+                fontFamily: "Segoe Print, Display, Script, Sans Serif",
+              }}
+            >
+              {props.title}
+            </a>
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {props.neighborhood}, {props.city}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            <Rating
-              name="read-only"
-              value={props.starRating}
-              precision={0.5}
-              max={3}
-              readOnly
-              style={{ position: "relative", bottom: "1rem" }}
-            />
-          </Typography>
+          <Typography variant="body2" color="text.secondary"></Typography>
         </CardContent>
       </Card>
     </div>
@@ -215,6 +214,8 @@ export function Activity(props) {
 
 function RateFilter(props) {
   const [rating, setRating] = useState("");
+  const [activities, setActivities] = useState([]);
+  const [loading, setLoading] = useState(false);
   const handleChange = (event) => {
     setRating(event.target.value);
     fetch(
@@ -224,15 +225,31 @@ function RateFilter(props) {
       .then((response) => response.json())
       .then((body) => {
         console.log("setting radius response");
+        console.log(props.longitude + ", " + props.latitude);
         const newActivityXids = body.features?.map(
           (feature) => feature.properties.xid
         );
         console.log(newActivityXids);
         props.setActivityXids(newActivityXids); // you might want to reduce the size of the array so that the results load faster, maybe dont save more than 100
-        props.fetchNewActivities(newActivityXids);
+        fetchNewActivities(newActivityXids);
       })
       .catch((err) => console.error(err));
   };
+  function fetchNewActivities(activityXids) {
+    var promises = activityXids.map((xid) =>
+      fetch(
+        `https://opentripmap-places-v1.p.rapidapi.com/en/places/xid/${xid}`,
+        options
+      ).then((response) => response.json())
+    );
+
+    Promise.all(promises).then((results) => {
+      console.log("Promise.all");
+      console.log(results);
+      setLoading(false);
+      setActivities(results);
+    });
+  }
   const options = {
     method: "GET",
     headers: {
@@ -243,8 +260,14 @@ function RateFilter(props) {
 
   return (
     <Box class="filter">
-      <FormControl style={{ margin: "2rem" }}>
-        <InputLabel id="demo-simple-select-label">Filter by Rating</InputLabel>
+      <FormControl
+        variant="standard"
+        sx={{ m: 1, minWidth: 120 }}
+        style={{ margin: "2rem", marginLeft: "4rem" }}
+      >
+        <InputLabel id="demo-simple-select-standard-label">
+          Filter by Rating
+        </InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"

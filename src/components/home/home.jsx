@@ -58,7 +58,10 @@ function LocationInput({ setCurrLocation, setAirports, setCurrLocationId }) {
           id="standard-basic"
           label="Where would you like to go?"
           variant="standard"
-          //style={{ minWidth: "20rem" }} // justifyContent: "center" }}
+          style={{
+            fontFamily: "Segoe Print, Display, Script, Sans Serif",
+            minWidth: "16rem",
+          }}
           onChange={(e) => setLocationInput(e.target.value)}
         />
       </form>
@@ -94,6 +97,7 @@ function Airport(props) {
               maxWidth: "45rem",
               minHeight: "10rem",
               maxHeight: "10rem",
+              fontFamily: "Segoe Print, Display, Script, Sans Serif",
             }}
             label={props.name}
           >
@@ -116,11 +120,14 @@ function Welcome() {
         style={{
           color: "rgb(12, 84, 66)",
           fontWeight: "bolder",
+          fontFamily: "Segoe Print, Display, Script, Sans Serif",
         }}
       >
         Welcome to TRAVELAID
       </Typography>
-      <h3>We hope you enjoy your travels</h3>
+      <h3 style={{ fontFamily: "Segoe Print, Display, Script, Sans Serif" }}>
+        We hope you enjoy your travels
+      </h3>
     </div>
   );
 }
@@ -169,7 +176,6 @@ export const Home = (props) => {
 
   return (
     <div class="home">
-      {/* style={{ marginLeft: "auto", marginRight: "auto" }}> */}
       <Welcome />
       <LocationInput
         setAirports={setAirports}

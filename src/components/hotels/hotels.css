@@ -30,7 +30,9 @@
 
 .priceFilter{
     grid-row: 1;
-    grid-column: 2;
+    grid-column: 3;
+    margin-left: 40rem;
+
 }
 
 .maxPrice{

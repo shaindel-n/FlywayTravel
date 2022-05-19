@@ -47,6 +47,7 @@ export const Header = () => {
             noWrap
             component="div"
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+            style={{ fontFamily: "Segoe Print, Display, Script, Sans Serif" }}
           >
             TRAVELAID
           </Typography>
@@ -85,7 +86,14 @@ export const Header = () => {
                   key={page.title}
                   onClick={() => handleCloseNavMenu(page)}
                 >
-                  <Typography textAlign="center">{page.title}</Typography>
+                  <Typography
+                    textAlign="center"
+                    style={{
+                      fontFamily: "Segoe Print, Display, Script, Sans Serif",
+                    }}
+                  >
+                    {page.title}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -95,8 +103,9 @@ export const Header = () => {
             noWrap
             component="div"
             sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
+            style={{ fontFamily: "Segoe Print, Display, Script, Sans Serif" }}
           >
-            FINAL PROJECT
+            TRAVELAID
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
@@ -104,6 +113,9 @@ export const Header = () => {
                 key={page.title}
                 onClick={() => handleCloseNavMenu(page)}
                 sx={{ my: 2, color: "white", display: "block" }}
+                style={{
+                  fontFamily: "Segoe Print, Display, Script, Sans Serif",
+                }}
               >
                 {page.title}
               </Button>

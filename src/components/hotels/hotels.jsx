@@ -16,15 +16,10 @@ import {
   Grid,
   Rating,
 } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import "./hotels.css";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { FavoritesContext } from "../state/home/context";
 import Select from "@mui/material/Select";
-
 import { useEffect, useState, useContext } from "react";
-import { AlignVerticalBottom } from "@mui/icons-material";
-import { FavoriteBorderTwoTone } from "@material-ui/icons";
 
 export function Hotel(props) {
   const listContext = useContext(FavoritesContext);
@@ -34,7 +29,7 @@ export function Hotel(props) {
       <Card
         sx={{ maxWidth: 330, minWidth: 330 }}
         style={{
-          background: "rgb(88, 214, 183)",
+          background: "white",
           //color: "white",
           minHeight: "23rem",
           maxHeight: "23rem",
@@ -47,13 +42,16 @@ export function Hotel(props) {
           image={props.thumbnail}
           alt="thumbnail"
         />
-        <CardActions style={{ position: "relative", top: "10rem" }}>
+        <CardActions
+          style={{ position: "relative", top: "10rem", float: "left" }}
+        >
           <Button>
             <FavoriteIcon
               style={{
                 color: favorited ? "red" : "lightgray",
               }}
               onClick={() => {
+                console.log("clicked");
                 if (!favorited) {
                   listContext.listDispatch({
                     type: "add",
@@ -75,15 +73,37 @@ export function Hotel(props) {
                 setFavorited(true);
               }}
             />
-            {console.log(listContext)}
           </Button>
         </CardActions>
-        <CardContent style={{ position: "relative", top: "-3rem" }}>
-          <Typography gutterBottom variant="h5" component="div" color="white">
+        <CardContent style={{ position: "relative" }}>
+          <Typography
+            gutterBottom
+            variant="h5"
+            component="div"
+            color="rgb(88, 214, 183)"
+            style={{
+              position: "relative",
+              right: "2rem",
+              fontFamily: "Segoe Print, Display, Script, Sans Serif",
+              fontStyle: "italic",
+            }}
+          >
             {props.title}
           </Typography>
-          <Typography variant="body2">{props.streetAddress}</Typography>
-          <Typography style={{ marginTop: ".2rem" }}>
+          <Typography
+            variant="body2"
+            style={{
+              fontFamily: "Segoe Print, Display, Script, Sans Serif",
+            }}
+          >
+            {props.streetAddress}
+          </Typography>
+          <Typography
+            style={{
+              marginTop: ".2rem",
+              fontFamily: "Segoe Print, Display, Script, Sans Serif",
+            }}
+          >
             Cost per night:
             {props.price &&
             props.price.ratePlan &&
@@ -150,7 +170,7 @@ function RateFilter(props) {
   const handleChange = (event) => {
     setRating(event.target.value);
     fetch(
-      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=28&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD&starRatings=${event.target.value}`,
+      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=24&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD&starRatings=${event.target.value}`,
       options
     )
       .then((response) => response.json())
@@ -170,7 +190,11 @@ function RateFilter(props) {
   return (
     <Box class="filter">
       {/* style={{ position: "absolute", right: "5", top: "5" }}> */}
-      <FormControl style={{ margin: "2rem" }}>
+      <FormControl
+        variant="standard"
+        sx={{ m: 1, minWidth: 120 }}
+        style={{ margin: "2rem" }}
+      >
         <InputLabel id="demo-simple-select-label">Filter by Rating</InputLabel>
         <Select
           labelId="demo-simple-select-label"
@@ -197,7 +221,7 @@ function PriceFilter(props) {
   const handleMinChange = (event) => {
     setMinPrice(event.target.value);
     fetch(
-      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=28&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD&priceMin=${event.target.value}&priceMax=${maxPrice}`,
+      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=24&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD&priceMin=${event.target.value}&priceMax=${maxPrice}`,
       options
     )
       .then((response) => response.json())
@@ -212,7 +236,7 @@ function PriceFilter(props) {
   const handleMaxChange = (event) => {
     setMaxPrice(event.target.value);
     fetch(
-      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=28&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD&priceMin=${minPrice}&priceMax=${event.target.value}`,
+      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=24&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD&priceMin=${minPrice}&priceMax=${event.target.value}`,
       options
     )
       .then((response) => response.json())
@@ -238,8 +262,8 @@ function PriceFilter(props) {
 
   return (
     <div class="priceFilter">
-      <Box class="minPrice">
-        <FormControl fullWidth>
+      <Box class="minPrice" style={{ marginRight: "-4rem" }}>
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
           <InputLabel id="demo-simple-select-label">Min</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -257,8 +281,8 @@ function PriceFilter(props) {
           </Select>
         </FormControl>
       </Box>
-      <Box class="maxPrice">
-        <FormControl fullWidth>
+      <Box class="maxPrice" style={{ marginRight: "-6rem" }}>
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
           <InputLabel id="demo-simple-select-label">Max</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -297,11 +321,6 @@ export const Hotels = (props) => {
   //   });
   // };
 
-  // const setLocation = (text) => {
-  //   setLocId(text);
-  //   console.log(locId);
-  // };
-
   const options = {
     method: "GET",
     headers: {
@@ -311,7 +330,7 @@ export const Hotels = (props) => {
   };
   useEffect(() => {
     fetch(
-      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=28&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD`,
+      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=24&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD`,
       options
     )
       .then((response) => response.json())
@@ -321,7 +340,7 @@ export const Hotels = (props) => {
 
   useEffect(() => {
     fetch(
-      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=28&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD`,
+      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=24&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD`,
       options
     )
       .then((response) => response.json())
@@ -330,12 +349,22 @@ export const Hotels = (props) => {
   }, []);
   return (
     <div>
-      <Typography class="header" fontSize={30}>
+      <Typography
+        class="header"
+        fontSize={50}
+        // fontWeight="bold"
+        style={{
+          color: "grey",
+          fontFamily: "Segoe Print, Display, Script, Sans Serif",
+          textAlign: "center",
+          fontWeight: "bold",
+          marginTop: "4rem",
+        }}
+      >
         Hotels near {heading}
       </Typography>
       <div>
         <div class="hotels">
-          {/* <Pins addFavorite={addFavorite} removeFavorite={removeFavorite}/> */}
           <RateFilter
             rateFilter={rateFilter}
             setRateFilter={setRateFilter}
@@ -359,7 +388,6 @@ export const Hotels = (props) => {
                 <Hotel
                   title={hotel.name}
                   starRating={hotel.starRating}
-                  // liked={hotel.liked}
                   streetAddress={hotel.address.streetAddress}
                   thumbnail={hotel.optimizedThumbUrls.srpDesktop}
                   price={hotel}
@@ -367,7 +395,6 @@ export const Hotels = (props) => {
                   index={index}
                   id={hotel.id}
                 />
-                {/* {console.log(hotel.ratePlan)} */}
               </Grid>
             ))}
         </Grid>
