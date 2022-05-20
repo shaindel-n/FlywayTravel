@@ -4,7 +4,8 @@ import { Hotels } from "../hotels/hotels";
 import { Home } from "../home/home";
 import { Header } from "../header/header";
 import { Activities, MainPage } from "../activities/activities";
-import { FavoritesProvider } from "../state/home/context";
+import { FavoritesProvider } from "../state/hotelContext";
+import { ActivityFavoritesProvider } from "../state/activityContext";
 import { Favorites } from "../favorites/favorites";
 import { useState } from "react";
 
@@ -28,35 +29,37 @@ function App() {
   return (
     //<div className="App">
     <FavoritesProvider>
-      <HashRouter>
-        <Header />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Home
-                location={locationId}
-                changeLocation={changeLocation}
-                changeLongitude={changeLongitude}
-                changeLatitude={changeLatitude}
-              />
-            }
-          />
-          <Route path="/hotels" element={<Hotels location={locationId} />} />
-          <Route
-            style={{ backgroundColor: "whitesmoke" }}
-            path="/activities"
-            element={
-              <MainPage
-                locationId={locationId}
-                longitude={longitude}
-                latitude={latitude}
-              />
-            }
-          />
-          <Route path="/favorites" element={<Favorites />} />
-        </Routes>
-      </HashRouter>
+      <ActivityFavoritesProvider>
+        <HashRouter>
+          <Header />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Home
+                  location={locationId}
+                  changeLocation={changeLocation}
+                  changeLongitude={changeLongitude}
+                  changeLatitude={changeLatitude}
+                />
+              }
+            />
+            <Route path="/hotels" element={<Hotels location={locationId} />} />
+            <Route
+              style={{ backgroundColor: "whitesmoke" }}
+              path="/activities"
+              element={
+                <MainPage
+                  locationId={locationId}
+                  longitude={longitude}
+                  latitude={latitude}
+                />
+              }
+            />
+            <Route path="/favorites" element={<Favorites />} />
+          </Routes>
+        </HashRouter>
+      </ActivityFavoritesProvider>
     </FavoritesProvider>
     //</div>
   );

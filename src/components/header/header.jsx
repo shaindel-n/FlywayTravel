@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { MenuRounded } from "@material-ui/icons";
 
 const pages = [
-  { title: "Home", path: "/" },
+  { title: "Transportation", path: "/" },
   { title: "Hotels", path: "/hotels" },
   { title: "Activities", path: "/activities" },
   { title: "Favorites", path: "/favorites" },
@@ -49,7 +49,7 @@ export const Header = () => {
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
             style={{ fontFamily: "Segoe Print, Display, Script, Sans Serif" }}
           >
-            TRAVELAID
+            FLYWAY
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -105,7 +105,7 @@ export const Header = () => {
             sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
             style={{ fontFamily: "Segoe Print, Display, Script, Sans Serif" }}
           >
-            TRAVELAID
+            FLYWAY
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (

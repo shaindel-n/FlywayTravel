@@ -1,9 +1,6 @@
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import {
-  Paper,
   Box,
-  TextField,
-  IconButton,
   InputLabel,
   MenuItem,
   FormControl,
@@ -17,7 +14,7 @@ import {
   Rating,
 } from "@mui/material";
 import "./hotels.css";
-import { FavoritesContext } from "../state/home/context";
+import { FavoritesContext } from "../state/hotelContext";
 import Select from "@mui/material/Select";
 import { useEffect, useState, useContext } from "react";
 
@@ -43,7 +40,7 @@ export function Hotel(props) {
           alt="thumbnail"
         />
         <CardActions
-          style={{ position: "relative", top: "10rem", float: "left" }}
+          style={{ position: "relative", top: "10rem", float: "right" }}
         >
           <Button>
             <FavoriteIcon
@@ -60,14 +57,9 @@ export function Hotel(props) {
                     thumbnail: props.thumbnail,
                     streetAddress: props.streetAddress,
                     starRating: props.starRating,
+                    favorited: true,
                     id: props.id,
-                    price:
-                      props.price &&
-                      props.price.ratePlan &&
-                      props.price.ratePlan.price &&
-                      props.price.ratePlan.price.current
-                        ? props.price.ratePlan.price.current
-                        : "-----",
+                    price: props.price,
                   });
                 }
                 setFavorited(true);
@@ -75,7 +67,7 @@ export function Hotel(props) {
             />
           </Button>
         </CardActions>
-        <CardContent style={{ position: "relative" }}>
+        <CardContent style={{}}>
           <Typography
             gutterBottom
             variant="h5"
@@ -83,9 +75,10 @@ export function Hotel(props) {
             color="rgb(88, 214, 183)"
             style={{
               position: "relative",
-              right: "2rem",
+              left: "2rem",
               fontFamily: "Segoe Print, Display, Script, Sans Serif",
               fontStyle: "italic",
+              textAlign: "center",
             }}
           >
             {props.title}
@@ -94,6 +87,7 @@ export function Hotel(props) {
             variant="body2"
             style={{
               fontFamily: "Segoe Print, Display, Script, Sans Serif",
+              color: "grey",
             }}
           >
             {props.streetAddress}
@@ -102,6 +96,7 @@ export function Hotel(props) {
             style={{
               marginTop: ".2rem",
               fontFamily: "Segoe Print, Display, Script, Sans Serif",
+              color: "grey",
             }}
           >
             Cost per night:
@@ -254,11 +249,6 @@ function PriceFilter(props) {
       "X-RapidAPI-Key": "12754539cdmshf2c81b762b1275bp1db5dajsncd6d5dbc56ac",
     },
   };
-  //if (changed) {
-  //useEffect(() => {
-
-  //}, []);
-  //}
 
   return (
     <div class="priceFilter">
@@ -307,8 +297,7 @@ export const Hotels = (props) => {
   const [rateFilter, setRateFilter] = useState("1");
   const [priceFilterMin, setPriceFilterMin] = useState("0");
   const [priceFilterMax, setPriceFilterMax] = useState("100");
-  //const [locId, setLocId] = useState("");
-
+  const [favorited, setFavorited] = useState(false);
   const [heading, setHeading] = useState("");
 
   // const removeFavorite = () => {
@@ -351,14 +340,13 @@ export const Hotels = (props) => {
     <div>
       <Typography
         class="header"
-        fontSize={50}
-        // fontWeight="bold"
         style={{
-          color: "grey",
+          color: "rgb(12, 84, 66)",
           fontFamily: "Segoe Print, Display, Script, Sans Serif",
           textAlign: "center",
           fontWeight: "bold",
           marginTop: "4rem",
+          fontSize: "1.8rem",
         }}
       >
         Hotels near {heading}
@@ -394,6 +382,7 @@ export const Hotels = (props) => {
                   key={hotel.id}
                   index={index}
                   id={hotel.id}
+                  favorited={favorited}
                 />
               </Grid>
             ))}

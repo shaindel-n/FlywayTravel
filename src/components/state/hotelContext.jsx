@@ -5,21 +5,23 @@ const changeFavoritesReducer = (state, action) => {
   var newFavorites = [];
   switch (action.type) {
     case "add":
-      newFavorites = [
-        ...state,
-        {
-          title: action.title,
-          id: action.id,
-          index: action.index,
-          thumbnail: action.thumbnail,
-          isFavorited: true,
-          streetAddress: action.streetAddress,
-          starRating: action.starRating,
-          price: action.price,
-        },
-      ];
-      return newFavorites;
-
+      if (!state.some((hotel) => action.id === hotel.id)) {
+        newFavorites = [
+          ...state,
+          {
+            title: action.title,
+            id: action.id,
+            index: action.index,
+            thumbnail: action.thumbnail,
+            isFavorited: true,
+            streetAddress: action.streetAddress,
+            starRating: action.starRating,
+            price: action.price,
+          },
+        ];
+        return newFavorites;
+      }
+      return state;
     case "remove":
       newFavorites = [...state];
       newFavorites.splice(action.index, 1);

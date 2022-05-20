@@ -123,11 +123,16 @@ function Welcome() {
           fontFamily: "Segoe Print, Display, Script, Sans Serif",
         }}
       >
-        Welcome to TRAVELAID
+        FLYWAY TRAVEL AGENCY
       </Typography>
-      <h3 style={{ fontFamily: "Segoe Print, Display, Script, Sans Serif" }}>
-        We hope you enjoy your travels
-      </h3>
+      <h1
+        style={{
+          fontFamily: "Segoe Print, Display, Script, Sans Serif",
+          marginTop: "3rem",
+        }}
+      >
+        We plan, you fly.
+      </h1>
     </div>
   );
 }

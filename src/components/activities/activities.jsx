@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useContext } from "react";
-import { FavoritesContext } from "../state/home/context";
+import { ActivityFavoritesContext } from "../state/activityContext";
 import "./activities.css";
 import React, { useState, useEffect } from "react";
 import { fontFamily } from "@mui/system";
@@ -49,7 +49,7 @@ export const MainPage = (props) => {
         class="header"
         fontSize={50}
         style={{
-          color: "grey",
+          color: "rgb(12, 84, 66)",
           textAlign: "center",
           marginTop: "4rem",
           fontWeight: "bold",
@@ -132,6 +132,8 @@ const Activities = (props) => {
               neighborhood={activity.address.neighbourhood}
               city={activity.address.city}
               url={activity.url}
+              index={index}
+              key={index}
             />
           </Grid>
         ))}
@@ -141,7 +143,7 @@ const Activities = (props) => {
 };
 
 export function Activity(props) {
-  const listContext = useContext(FavoritesContext);
+  const listContext = useContext(ActivityFavoritesContext);
   const [favorited, setFavorited] = useState(false);
 
   return (
@@ -179,7 +181,10 @@ export function Activity(props) {
                     index: props.index,
                     title: props.title,
                     starRating: props.starRating,
-                    id: props.id,
+                    isFavorited: true,
+                    neighborhood: props.neighborhood,
+                    city: props.city,
+                    id: props.title,
                   });
                   setFavorited(true);
                 }
@@ -202,7 +207,13 @@ export function Activity(props) {
               {props.title}
             </a>
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            style={{
+              color: "grey",
+              fontFamily: "Segoe Print, Display, Script, Sans Serif",
+            }}
+          >
             {props.neighborhood}, {props.city}
           </Typography>
           <Typography variant="body2" color="text.secondary"></Typography>
@@ -214,7 +225,7 @@ export function Activity(props) {
 
 function RateFilter(props) {
   const [rating, setRating] = useState("");
-  const [activities, setActivities] = useState([]);
+  // const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(false);
   const handleChange = (event) => {
     setRating(event.target.value);
@@ -225,7 +236,6 @@ function RateFilter(props) {
       .then((response) => response.json())
       .then((body) => {
         console.log("setting radius response");
-        console.log(props.longitude + ", " + props.latitude);
         const newActivityXids = body.features?.map(
           (feature) => feature.properties.xid
         );
@@ -247,13 +257,14 @@ function RateFilter(props) {
       console.log("Promise.all");
       console.log(results);
       setLoading(false);
-      setActivities(results);
+      props.setActivities(results);
     });
   }
+
   const options = {
     method: "GET",
     headers: {
-      "X-RapidAPI-Host": "hotels4.p.rapidapi.com",
+      "X-RapidAPI-Host": "opentripmap-places-v1.p.rapidapi.com",
       "X-RapidAPI-Key": "12754539cdmshf2c81b762b1275bp1db5dajsncd6d5dbc56ac",
     },
   };
