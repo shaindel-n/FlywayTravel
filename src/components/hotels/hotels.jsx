@@ -121,51 +121,13 @@ export function Hotel(props) {
   );
 }
 
-// function CheckInInput() {
-//   const [value, setValue] = useState();
-//   return (
-//     <div class="checkIn">
-//       {/*style={{ margin: "2rem" }}*/}
-//       <LocalizationProvider dateAdapter={AdapterDateFns}>
-//         <DatePicker
-//           label="Check In"
-//           value={value}
-//           onChange={(newValue) => {
-//             setValue(newValue);
-//             console.log(value);
-//           }}
-//           renderInput={(params) => <TextField {...params} />}
-//         />
-//       </LocalizationProvider>
-//     </div>
-//   );
-// }
-
-// function CheckOutInput() {
-//   const [value, setValue] = useState();
-//   return (
-//     <div class="checkOut">
-//       {/* style={{ margin: "2rem" }}> */}
-//       <LocalizationProvider dateAdapter={AdapterDateFns}>
-//         <DatePicker
-//           label="Check Out"
-//           value={value}
-//           onChange={(newValue) => {
-//             setValue(newValue);
-//           }}
-//           renderInput={(params) => <TextField {...params} />}
-//         />
-//       </LocalizationProvider>
-//     </div>
-//   );
-// }
-
 function RateFilter(props) {
   const [rating, setRating] = useState("");
   const handleChange = (event) => {
     setRating(event.target.value);
+    props.changeRating(event.target.value);
     fetch(
-      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=24&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD&starRatings=${event.target.value}`,
+      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=24&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD&starRatings=${event.target.value}&priceMin=${props.priceFilterMin}&priceMax=${props.priceFilterMax}`,
       options
     )
       .then((response) => response.json())
@@ -174,6 +136,7 @@ function RateFilter(props) {
       )
       .catch((err) => console.error(err));
   };
+  console.log(props.priceFilterMin + " " + props.priceFilterMax);
   const options = {
     method: "GET",
     headers: {
@@ -215,8 +178,9 @@ function PriceFilter(props) {
 
   const handleMinChange = (event) => {
     setMinPrice(event.target.value);
+    props.changePriceMin(event.target.value);
     fetch(
-      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=24&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD&priceMin=${event.target.value}&priceMax=${maxPrice}`,
+      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=24&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD&starRatings=${props.ratingFilter}&priceMin=${event.target.value}&priceMax=${maxPrice}`,
       options
     )
       .then((response) => response.json())
@@ -230,8 +194,9 @@ function PriceFilter(props) {
 
   const handleMaxChange = (event) => {
     setMaxPrice(event.target.value);
+    props.changePriceMax(event.target.value);
     fetch(
-      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=24&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD&priceMin=${minPrice}&priceMax=${event.target.value}`,
+      `https://hotels4.p.rapidapi.com/properties/list?destinationId=${props.location}&pageNumber=1&pageSize=24&checkIn=2020-01-08&checkOut=2020-01-15&adults1=1&sortOrder=PRICE&locale=en_US&currency=USD&starRatings=${props.ratingFilter}&priceMin=${minPrice}&priceMax=${event.target.value}`,
       options
     )
       .then((response) => response.json())
@@ -310,6 +275,18 @@ export const Hotels = (props) => {
   //   });
   // };
 
+  const changeRating = (rating) => {
+    setRateFilter(rating);
+  };
+
+  const changePriceMin = (price) => {
+    setPriceFilterMin(price);
+  };
+
+  const changePriceMax = (price) => {
+    setPriceFilterMax(price);
+  };
+
   const options = {
     method: "GET",
     headers: {
@@ -355,7 +332,7 @@ export const Hotels = (props) => {
         <div class="hotels">
           <RateFilter
             rateFilter={rateFilter}
-            setRateFilter={setRateFilter}
+            changeRating={changeRating}
             setHotels={setHotels}
             location={props.location}
             priceFilterMin={priceFilterMin}
@@ -364,8 +341,8 @@ export const Hotels = (props) => {
           <PriceFilter
             setHotels={setHotels}
             location={props.location}
-            setPriceFilterMin={setPriceFilterMin}
-            setPriceFilterMax={setPriceFilterMax}
+            changePriceMin={changePriceMin}
+            changePriceMax={changePriceMax}
             rateFilter={rateFilter}
           />
         </div>
