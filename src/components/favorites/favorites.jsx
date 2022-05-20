@@ -56,7 +56,7 @@ export const Favorites = () => {
           color: "grey",
         }}
       >
-        Activities
+        Attractions
       </Typography>
       <Grid container direction="row" columns={12} spacing={2}>
         {activityListContext.listState.map((activity, index) => (
