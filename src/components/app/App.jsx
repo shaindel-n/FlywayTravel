@@ -3,8 +3,8 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import { Hotels } from "../hotels/hotels";
 import { Home } from "../home/home";
 import { Header } from "../header/header";
-import { Activities, MainPage } from "../activities/activities";
-import { FavoritesProvider } from "../state/hotelContext";
+import { MainPage } from "../activities/activities";
+import { HotelFavoritesProvider } from "../state/hotelContext";
 import { ActivityFavoritesProvider } from "../state/activityContext";
 import { Favorites } from "../favorites/favorites";
 import { useState } from "react";
@@ -13,7 +13,6 @@ function App() {
   const [locationId, setLocationId] = useState("1662393");
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
-  const [currHotel, setCurrHotel] = useState("");
 
   const changeLocation = (locId) => {
     setLocationId(locId);
@@ -27,8 +26,7 @@ function App() {
   };
 
   return (
-    //<div className="App">
-    <FavoritesProvider>
+    <HotelFavoritesProvider>
       <ActivityFavoritesProvider>
         <HashRouter>
           <Header />
@@ -60,8 +58,7 @@ function App() {
           </Routes>
         </HashRouter>
       </ActivityFavoritesProvider>
-    </FavoritesProvider>
-    //</div>
+    </HotelFavoritesProvider>
   );
 }
 

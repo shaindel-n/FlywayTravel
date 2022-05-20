@@ -27,7 +27,6 @@ export function Hotel(props) {
         sx={{ maxWidth: 330, minWidth: 330 }}
         style={{
           background: "white",
-          //color: "white",
           minHeight: "23rem",
           maxHeight: "23rem",
           marginRight: "1rem",
@@ -147,7 +146,6 @@ function RateFilter(props) {
 
   return (
     <Box class="filter">
-      {/* style={{ position: "absolute", right: "5", top: "5" }}> */}
       <FormControl
         variant="standard"
         sx={{ m: 1, minWidth: 120 }}
@@ -262,18 +260,7 @@ export const Hotels = (props) => {
   const [rateFilter, setRateFilter] = useState("1");
   const [priceFilterMin, setPriceFilterMin] = useState("0");
   const [priceFilterMax, setPriceFilterMax] = useState("100");
-  const [favorited, setFavorited] = useState(false);
   const [heading, setHeading] = useState("");
-
-  // const removeFavorite = () => {
-  //   listContext.listDispatch({
-  //     type: "add",
-  //     //index: props.index,
-  //     title: props.title,
-  //     id: props.id,
-  //     image: props.image,
-  //   });
-  // };
 
   const changeRating = (rating) => {
     setRateFilter(rating);
@@ -359,7 +346,6 @@ export const Hotels = (props) => {
                   key={hotel.id}
                   index={index}
                   id={hotel.id}
-                  favorited={favorited}
                 />
               </Grid>
             ))}

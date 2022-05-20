@@ -15,7 +15,6 @@
 
 .airport{
     grid-column: 2;
-    /* grid-row: 3; */
     margin-top: 2rem;
     max-width: 40rem;
     min-width: 40rem;

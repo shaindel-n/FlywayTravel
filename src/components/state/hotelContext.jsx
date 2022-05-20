@@ -22,19 +22,15 @@ const changeFavoritesReducer = (state, action) => {
         return newFavorites;
       }
       return state;
-    case "remove":
-      newFavorites = [...state];
-      newFavorites.splice(action.index, 1);
-      return newFavorites;
 
     default:
-      throw new Error(`Count Reducer does not recognize ${action.type}`);
+      throw new Error(`Reducer does not recognize ${action.type}`);
   }
 };
 
 export const FavoritesContext = React.createContext();
 
-export const FavoritesProvider = (props) => {
+export const HotelFavoritesProvider = (props) => {
   const [favoritesState, dispatchChangeFavorites] = useReducer(
     changeFavoritesReducer,
     initialList

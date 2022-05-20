@@ -1,19 +1,15 @@
 // import FavoriteIcon from "@mui/icons-material/Favorite";
 import {
-  Paper,
   Box,
-  IconButton,
   InputLabel,
   MenuItem,
   FormControl,
   Select,
   Card,
-  CardMedia,
   CardContent,
   Typography,
   CardActions,
   Grid,
-  TextField,
   Rating,
   Button,
 } from "@mui/material";
@@ -22,7 +18,6 @@ import { useContext } from "react";
 import { ActivityFavoritesContext } from "../state/activityContext";
 import "./activities.css";
 import React, { useState, useEffect } from "react";
-import { fontFamily } from "@mui/system";
 
 export const MainPage = (props) => {
   const [heading, setHeading] = useState("");
@@ -89,7 +84,7 @@ const Activities = (props) => {
             (feature) => feature.properties.xid
           );
           console.log(newActivityXids);
-          setActivityXids(newActivityXids); // you might want to reduce the size of the array so that the results load faster, maybe dont save more than 100
+          setActivityXids(newActivityXids);
           setLoading(true);
           fetchNewActivities(newActivityXids);
         })
@@ -225,7 +220,6 @@ export function Activity(props) {
 
 function RateFilter(props) {
   const [rating, setRating] = useState("");
-  // const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(false);
   const handleChange = (event) => {
     setRating(event.target.value);
@@ -240,7 +234,7 @@ function RateFilter(props) {
           (feature) => feature.properties.xid
         );
         console.log(newActivityXids);
-        props.setActivityXids(newActivityXids); // you might want to reduce the size of the array so that the results load faster, maybe dont save more than 100
+        props.setActivityXids(newActivityXids);
         fetchNewActivities(newActivityXids);
       })
       .catch((err) => console.error(err));

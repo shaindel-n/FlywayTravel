@@ -46,13 +46,11 @@
 
 .hotel{
     grid-column: 2;
-    /* grid-row: 2; */
     margin-top: 3rem;
     margin-right: 2rem;
     text-align: center;
     margin: 1rem;
     float: left;
-    /* color: rgb(88, 214, 183); */
 } 
 
 .header{

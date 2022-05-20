@@ -1,19 +1,11 @@
 import { Button, Paper, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { useContext, useEffect, useState } from "react";
-//import { HomeContext } from "../state/home/context";
+import { useState } from "react";
 import "./home.css";
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
-import Hotels from "../hotels/hotels";
 import { Link } from "react-router-dom";
 
-function LocationInput({ setCurrLocation, setAirports, setCurrLocationId }) {
+function LocationInput(props) {
   const [locationInput, setLocationInput] = useState("");
 
   const inputLocation = (e) => {
@@ -22,8 +14,7 @@ function LocationInput({ setCurrLocation, setAirports, setCurrLocationId }) {
       console.log("error");
       return;
     }
-    setCurrLocation(locationInput);
-    console.log(locationInput);
+    props.setCurrLocation(locationInput);
     setLocationInput("");
     try {
       const options = {
@@ -34,18 +25,14 @@ function LocationInput({ setCurrLocation, setAirports, setCurrLocationId }) {
             "12754539cdmshf2c81b762b1275bp1db5dajsncd6d5dbc56ac",
         },
       };
-      //useEffect(() => {
       fetch(
         `https://hotels4.p.rapidapi.com/locations/v2/search?query=${locationInput}&locale=en_US&currency=USD`,
         options
       )
         .then((response) => response.json())
-        .then((response) => setAirports(response.suggestions[3].entities))
-        // .then((response) =>
-        //   setCurrLocationId(response.suggestions[0].entities[0].destinationId)
-        // )
+        .then((response) => props.setAirports(response.suggestions[3].entities))
+
         .catch((err) => console.error(err));
-      //}, []);
     } catch (err) {
       console.log("error", err);
     }
@@ -74,13 +61,8 @@ function Airport(props) {
     props.setCurrLocationId(props.locationId);
     props.setCurrLong(props.longitude);
     props.setCurrLat(props.latitude);
-    console.log(
-      "longitude: " + props.longitude + "latitude: " + props.latitude
-    );
-    console.log(props.locationId);
   };
   return (
-    //<div>
     <Link to="/hotels" style={{ textDecoration: "none" }}>
       <Button
         onClick={() => {
@@ -108,7 +90,6 @@ function Airport(props) {
         </Box>
       </Button>
     </Link>
-    //</div>
   );
 }
 
