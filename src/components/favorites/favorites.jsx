@@ -20,7 +20,7 @@ export const Favorites = () => {
           fontFamily: "Segoe Print, Display, Script, Sans Serif",
         }}
       >
-        My Favorites
+        My Pins
       </Typography>
       <Typography
         variant="h4"

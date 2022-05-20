@@ -51,7 +51,7 @@ export const MainPage = (props) => {
           fontFamily: "Segoe Print, Display, Script, Sans Serif",
         }}
       >
-        Activities near {heading}
+        Attractions near {heading}
       </Typography>
       <Activities latitude={props.latitude} longitude={props.longitude} />
     </div>
